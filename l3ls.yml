@@ -71,59 +71,73 @@ L3:
       ip: 10.0.0.1
       cidr: 30
       description: SPINE2
+      status: disable
     - interface: Ethernet2
       ip: 172.16.200.1
       cidr: 30
       description: LEAF1
+      status: enable
     - interface: Ethernet3
       ip: 172.16.200.5
       cidr: 30
       description: LEAF2
+      status: enable
     - interface: Ethernet4
       ip: 172.16.200.9
       cidr: 30
       description: LEAF3
+      status: enable
     - interface: Ethernet5
       ip: 172.16.200.13
       cidr: 30
       description: LEAF4
+      status: enable
     - interface: Ethernet6
-      ip: 172.16.200.33
+      ip: 172.16.200.17
       cidr: 30
       description: LEAF5
+      status: enable
     - interface: Ethernet7
-      ip: 172.16.200.37
+      ip: 172.16.200.21
       cidr: 30
       description: LEAF6
+      status: enable
   spine2:
     - interface: Ethernet1
       ip: 10.0.0.2
       cidr: 30
       description: SPINE2
+      status: disable
     - interface: Ethernet2
-      ip: 172.16.200.17
-      cidr: 30
-      description: LEAF1
-    - interface: Ethernet3
-      ip: 172.16.200.21
-      cidr: 30
-      description: LEAF2
-    - interface: Ethernet4
       ip: 172.16.200.25
       cidr: 30
-      description: LEAF3
-    - interface: Ethernet5
+      description: LEAF1
+      status: enable
+    - interface: Ethernet3
       ip: 172.16.200.29
       cidr: 30
+      description: LEAF2
+      status: enable
+    - interface: Ethernet4
+      ip: 172.16.200.33
+      cidr: 30
+      description: LEAF3
+      status: enable
+    - interface: Ethernet5
+      ip: 172.16.200.37
+      cidr: 30
       description: LEAF4
+      status: enable
     - interface: Ethernet6
       ip: 172.16.200.41
       cidr: 30
       description: LEAF5
+      status: enable
     - interface: Ethernet7
       ip: 172.16.200.45
       cidr: 30
       description: LEAF6
+      status: enable
   leaf1:
     - interface: Ethernet1
       ip: 0.0.0.0
@@ -136,7 +150,7 @@ L3:
       description: SPINE1
       status: enable
     - interface: Ethernet3
-      ip: 172.16.200.18
+      ip: 172.16.200.26
       cidr: 30
       description: SPINE2
       status: enable
@@ -152,7 +166,7 @@ L3:
       description: SPINE1
       status: enable
     - interface: Ethernet3
-      ip: 172.16.200.22
+      ip: 172.16.200.30
       cidr: 30
       description: SPINE2
       status: enable
@@ -168,7 +182,7 @@ L3:
       description: SPINE1
       status: enable
     - interface: Ethernet3
-      ip: 172.16.200.26
+      ip: 172.16.200.34
       cidr: 30
       description: SPINE2
       status: enable
@@ -184,28 +198,32 @@ L3:
       description: SPINE1
       status: enable
     - interface: Ethernet3
-      ip: 172.16.200.30
+      ip: 172.16.200.38
       cidr: 30
       description: SPINE2
       status: enable
   leaf5:
     - interface: Ethernet1
-      ip: 172.16.200.34
+      ip: 172.16.200.18
       cidr: 30
       description: SPINE1
+      status: enable
     - interface: Ethernet2
-      ip: 172.16.200.38
-      cidr: 30
-      description: SPINE2
-  leaf6:
-    - interface: Ethernet1
       ip: 172.16.200.42
       cidr: 30
+      description: SPINE2
+      status: enable
+  leaf6:
+    - interface: Ethernet1
+      ip: 172.16.200.22
+      cidr: 30
       description: SPINE1
+      status: enable
     - interface: Ethernet2
       ip: 172.16.200.46
       cidr: 30
       description: SPINE2
+      status: enable
 
 BGP:
   spine1:

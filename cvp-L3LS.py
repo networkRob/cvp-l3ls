@@ -29,10 +29,16 @@ shost = sendCmd(['show hostname'])['hostname']
 
 #L3 interfaces
 for r1 in infoY['L3'][shost]:
+    lip = r1['ip']
+    lstatus = r1['status']
     print('interface %s' %(r1['interface']))
-#add check for 0.0.0 and status disabled
-    print(' no switchport')
-    print(' ip address %s/%s' %(r1['ip'],r1['cidr']))
+    if lip == '0.0.0.0':
+        print(' switchport mode access')
+    else:
+        print(' no switchport')
+        print(' ip address %s/%s' %(lip,r1['cidr']))
+    if lstatus == 'disable':
+        print(' shutdown')
     print(' description %s' %(r1['description']))
     print('!')
 print('ip routing')
