@@ -1,0 +1,102 @@
+---
+topology:
+  spine1:
+    connections:
+      - local: Ethernet5
+        device: leaf5
+        interface: Ethernet1
+      - local: Ethernet6
+        device: leaf6
+        interface: Ethernet1
+  spine2:
+    connections:
+      - local: Ethernet5
+        device: leaf5
+        interface: Ethernet2
+      - local: Ethernet6
+        device: leaf6
+        interface: Ethernet2
+  leaf5:
+    connections:
+      - local: Ethernet1
+        device: spine1
+        interface: Ethernet5
+      - local: Ethernet2
+        device: spine2
+        interface: Ethernet5
+  leaf6:
+    connections:
+      - local: Ethernet1
+        device: spine1
+        interface: Ethernet6
+      - local: Ethernet2
+        device: spine2
+        interface: Ethernet6
+
+L3:
+  spine1:
+    - interface: Ethernet5
+      ip: 172.16.200.33
+      cidr: 30
+      description: LEAF5
+    - interface: Ethernet6
+      ip: 172.16.200.37
+      cidr: 30
+      description: LEAF6
+  spine2:
+    - interface: Ethernet5
+      ip: 172.16.200.41
+      cidr: 30
+      description: LEAF5
+    - interface: Ethernet6
+      ip: 172.16.200.45
+      cidr: 30
+      description: LEAF6
+  leaf5:
+    - interface: Ethernet5
+      ip: 172.16.200.34
+      cidr: 30
+      description: SPINE1
+    - interface: Ethernet6
+      ip: 172.16.200.38
+      cidr: 30
+      description: SPINE2
+  leaf6:
+    - interface: Ethernet5
+      ip: 172.16.200.42
+      cidr: 30
+      description: SPINE1
+    - interface: Ethernet6
+      ip: 172.16.200.46
+      cidr: 30
+      description: SPINE2
+
+BGP:
+  spine1:
+    bgp_neighbors:
+      - device: leaf5
+        remote-as: 65105
+      - device: leaf6
+        remote-as: 65106
+    as: 65001
+  spine2:
+    bgp_neighbors:
+      - device: leaf5
+        remote-as: 65105
+      - device: leaf6
+        remote-as: 65106
+    as: 65002
+  leaf5:
+    bgp_neighbors:
+      - device: spine1
+        remote-as: 65001
+      - device: spine2
+        remote-as: 65002
+    as: 65105
+  leaf6:
+    bgp_neighbors:
+      - device: spine1
+        remote-as: 65001
+      - device: spine2
+        remote-as: 65002
+    as: 65106
