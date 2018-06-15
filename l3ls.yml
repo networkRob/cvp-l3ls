@@ -1,300 +1,367 @@
 ---
+device:
+  2c:c2:60:56:df:93: spine1
+  2c:c2:60:94:d7:6c: spine2
+  2c:c2:60:fd:3d:06: leaf1
+  2c:c2:60:a7:83:ba: leaf2
+  2c:c2:60:0d:bd:7a: leaf3
+  2c:c2:60:b5:96:d9: leaf4
+  2c:c2:60:e7:0d:cd: leaf5
+  2c:c2:60:e7:4c:37: leaf6
 topology:
   spine1:
-    connections:
-      - local: Ethernet6
-        device: leaf5
-        interface: Ethernet1
-      - local: Ethernet7
-        device: leaf6
-        interface: Ethernet1
+    interfaces:
+      ethernet:
+        Ethernet1:
+          status: disable
+          description: SPINE2 Peer
+          ip: 0
+          cidr: 0
+          mode: trunk
+        Ethernet2:
+          status: enable
+          description: LEAF1
+          ip: 172.16.200.1
+          cidr: 30
+          mode: L3
+        Ethernet3:
+          status: enable
+          description: LEAF2
+          ip: 172.16.200.5
+          cidr: 30
+          mode: L3
+        Ethernet4:
+          status: enable
+          description: LEAF3
+          ip: 172.16.200.9
+          cidr: 30
+          mode: L3
+        Ethernet5:
+          status: enable
+          description: LEAF4
+          ip: 172.16.200.13
+          cidr: 30
+          mode: L3
+        Ethernet6:
+          status: enable
+          description: LEAF5
+          ip: 172.16.200.17
+          cidr: 30
+          mode: L3
+        Ethernet7:
+          status: enable
+          description: LEAF6
+          ip: 172.16.200.21
+          cidr: 30
+          mode: L3
+      loopback:
+        Loopback0:
+          ip: 172.16.0.1
+          cidr: 32
+    BGP:
+      bgp_neighbors:
+        - - leaf1
+          - Ethernet2
+        - - leaf2
+          - Ethernet2
+        - - leaf3
+          - Ethernet2
+        - - leaf4
+          - Ethernet2
+        - - leaf5
+          - Ethernet1
+        - - leaf6
+          - Ethernet1
+      as: 65001
   spine2:
-    connections:
-      - local: Ethernet6
-        device: leaf5
-        interface: Ethernet2
-      - local: Ethernet7
-        device: leaf6
-        interface: Ethernet2
+    interfaces:
+      ethernet:
+        Ethernet1:
+          status: disable
+          description: SPINE1 Peer
+          ip: 0
+          cidr: 0
+          mode: trunk
+        Ethernet2:
+          status: enable
+          description: LEAF1
+          ip: 172.16.200.25
+          cidr: 30
+          mode: L3
+        Ethernet3:
+          status: enable
+          description: LEAF2
+          ip: 172.16.200.29
+          cidr: 30
+          mode: L3
+        Ethernet4:
+          status: enable
+          description: LEAF3
+          ip: 172.16.200.33
+          cidr: 30
+          mode: L3
+        Ethernet5:
+          status: enable
+          description: LEAF4
+          ip: 172.16.200.37
+          cidr: 30
+          mode: L3
+        Ethernet6:
+          status: enable
+          description: LEAF5
+          ip: 172.16.200.41
+          cidr: 30
+          mode: L3
+        Ethernet7:
+          status: enable
+          description: LEAF6
+          ip: 172.16.200.45
+          cidr: 30
+          mode: L3
+      loopback:
+        Loopback0:
+          ip: 172.16.0.2
+          cidr: 32
+    BGP:
+      bgp_neighbors:
+        - - leaf1
+          - Ethernet3
+        - - leaf2
+          - Ethernet3
+        - - leaf3
+          - Ethernet3
+        - - leaf4
+          - Ethernet3
+        - - leaf5
+          - Ethernet2
+        - - leaf6
+          - Ethernet2
+      as: 65002
   leaf1:
-    connections:
-      - local: Ethernet1
-        device: spine1
-        interface: Ethernet2
-      - local: Ethernet2
-        device: spine2
-        interface: Ethernet2
+    interfaces:
+      ethernet:
+        Ethernet1:
+          status: disable
+          description: LEAF2 Peer
+          ip: 0
+          cidr: 0
+          mode: trunk
+        Ethernet2:
+          status: enable
+          description: SPINE1
+          ip: 172.16.200.2
+          cidr: 30
+          mode: L3
+        Ethernet3:
+          status: enable
+          description: SPINE2
+          ip: 172.16.200.26
+          cidr: 30
+          mode: L3
+        Ethernet4:
+          status: enable
+          description: HOST
+          ip: 0
+          cidr: 0
+          mode: trunk
+        Ethernet5:
+          status: enable
+          description: HOST
+          ip: 0
+          cidr: 0
+          mode: trunk
+      loopback:
+        Loopback0:
+          ip: 172.16.0.3
+          cidr: 32
+    BGP:
+      bgp_neighbors:
+        - - spine1
+          - Ethernet2
+        - - spine2
+          - Ethernet2
+      as: 65101
   leaf2:
-    connections:
-      - local: Ethernet1
-        device: spine1
-        interface: Ethernet3
-      - local: Ethernet2
-        device: spine2
-        interface: Ethernet3
+    interfaces:
+      ethernet:
+        Ethernet1:
+          status: disable
+          description: LEAF1 Peer
+          ip: 0
+          cidr: 0
+          mode: trunk
+        Ethernet2:
+          status: enable
+          description: SPINE1
+          ip: 172.16.200.6
+          cidr: 30
+          mode: L3
+        Ethernet3:
+          status: enable
+          description: SPINE2
+          ip: 172.16.200.30
+          cidr: 30
+          mode: L3
+        Ethernet4:
+          status: enable
+          description: HOST
+          ip: 0
+          cidr: 0
+          mode: trunk
+        Ethernet5:
+          status: enable
+          description: HOST
+          ip: 0
+          cidr: 0
+          mode: trunk
+      loopback:
+        Loopback0:
+          ip: 172.16.0.4
+          cidr: 32
+    BGP:
+      bgp_neighbors:
+        - - spine1
+          - Ethernet3
+        - - spine2
+          - Ethernet3
+      as: 65102
   leaf3:
-    connections:
-      - local: Ethernet1
-        device: spine1
-        interface: Ethernet4
-      - local: Ethernet2
-        device: spine2
-        interface: Ethernet4    
+    interfaces:
+      ethernet:
+        Ethernet1:
+          status: disable
+          description: LEAF4 Peer
+          ip: 0
+          cidr: 0
+          mode: trunk
+        Ethernet2:
+          status: enable
+          description: SPINE1
+          ip: 172.16.200.10
+          cidr: 30
+          mode: L3
+        Ethernet3:
+          status: enable
+          description: SPINE2
+          ip: 172.16.200.34
+          cidr: 30
+          mode: L3
+        Ethernet4:
+          status: enable
+          description: HOST
+          ip: 0
+          cidr: 0
+          mode: trunk
+        Ethernet5:
+          status: enable
+          description: HOST
+          ip: 0
+          cidr: 0
+          mode: trunk
+      loopback:
+        Loopback0:
+          ip: 172.16.0.5
+          cidr: 32
+    BGP:
+      bgp_neighbors:
+        - - spine1
+          - Ethernet4
+        - - spine2
+          - Ethernet4
+      as: 65103
   leaf4:
-    connections:
-      - local: Ethernet1
-        device: spine1
-        interface: Ethernet5
-      - local: Ethernet2
-        device: spine2
-        interface: Ethernet5   
+    interfaces:
+      ethernet:
+        Ethernet1:
+          status: disable
+          description: LEAF3 Peer
+          ip: 0
+          cidr: 0
+          mode: trunk
+        Ethernet2:
+          status: enable
+          description: SPINE1
+          ip: 172.16.200.14
+          cidr: 30
+          mode: L3
+        Ethernet3:
+          status: enable
+          description: SPINE2
+          ip: 172.16.200.38
+          cidr: 30
+          mode: L3
+        Ethernet4:
+          status: enable
+          description: HOST
+          ip: 0
+          cidr: 0
+          mode: trunk
+        Ethernet5:
+          status: enable
+          description: HOST
+          ip: 0
+          cidr: 0
+          mode: trunk
+      loopback:
+        Loopback0:
+          ip: 172.16.0.6
+          cidr: 32
+    BGP:
+      bgp_neighbors:
+        - - spine1
+          - Ethernet5
+        - - spine2
+          - Ethernet5
+      as: 65104
   leaf5:
-    connections:
-      - local: Ethernet1
-        device: spine1
-        interface: Ethernet6
-      - local: Ethernet2
-        device: spine2
-        interface: Ethernet6
+    interfaces:
+      ethernet:
+        Ethernet1:
+          status: enable
+          description: SPINE1
+          ip: 172.16.200.18
+          cidr: 30
+          mode: L3
+        Ethernet2:
+          status: enable
+          description: SPINE2
+          ip: 172.16.200.42
+          cidr: 30
+          mode: L3
+      loopback:
+        Loopback0:
+          ip: 172.16.0.7
+          cidr: 32
+    BGP:
+      bgp_neighbors:
+        - - spine1
+          - Ethernet6
+        - - spine2
+          - Ethernet6
+      as: 65105
   leaf6:
-    connections:
-      - local: Ethernet1
-        device: spine1
-        interface: Ethernet7
-      - local: Ethernet2
-        device: spine2
-        interface: Ethernet7
-
-L3:
-  spine1:
-    - interface: Ethernet1
-      ip: 10.0.0.1
-      cidr: 30
-      description: SPINE2
-      status: disable
-    - interface: Ethernet2
-      ip: 172.16.200.1
-      cidr: 30
-      description: LEAF1
-      status: enable
-    - interface: Ethernet3
-      ip: 172.16.200.5
-      cidr: 30
-      description: LEAF2
-      status: enable
-    - interface: Ethernet4
-      ip: 172.16.200.9
-      cidr: 30
-      description: LEAF3
-      status: enable
-    - interface: Ethernet5
-      ip: 172.16.200.13
-      cidr: 30
-      description: LEAF4
-      status: enable
-    - interface: Ethernet6
-      ip: 172.16.200.17
-      cidr: 30
-      description: LEAF5
-      status: enable
-    - interface: Ethernet7
-      ip: 172.16.200.21
-      cidr: 30
-      description: LEAF6
-      status: enable
-  spine2:
-    - interface: Ethernet1
-      ip: 10.0.0.2
-      cidr: 30
-      description: SPINE2
-      status: disable
-    - interface: Ethernet2
-      ip: 172.16.200.25
-      cidr: 30
-      description: LEAF1
-      status: enable
-    - interface: Ethernet3
-      ip: 172.16.200.29
-      cidr: 30
-      description: LEAF2
-      status: enable
-    - interface: Ethernet4
-      ip: 172.16.200.33
-      cidr: 30
-      description: LEAF3
-      status: enable
-    - interface: Ethernet5
-      ip: 172.16.200.37
-      cidr: 30
-      description: LEAF4
-      status: enable
-    - interface: Ethernet6
-      ip: 172.16.200.41
-      cidr: 30
-      description: LEAF5
-      status: enable
-    - interface: Ethernet7
-      ip: 172.16.200.45
-      cidr: 30
-      description: LEAF6
-      status: enable
-  leaf1:
-    - interface: Ethernet1
-      ip: 0.0.0.0
-      cidr: 0
-      description: LEAF2
-      status: disable
-    - interface: Ethernet2
-      ip: 172.16.200.2
-      cidr: 30
-      description: SPINE1
-      status: enable
-    - interface: Ethernet3
-      ip: 172.16.200.26
-      cidr: 30
-      description: SPINE2
-      status: enable
-  leaf2:
-    - interface: Ethernet1
-      ip: 0.0.0.0
-      cidr: 0
-      description: LEAF1
-      status: disable
-    - interface: Ethernet2
-      ip: 172.16.200.6
-      cidr: 30
-      description: SPINE1
-      status: enable
-    - interface: Ethernet3
-      ip: 172.16.200.30
-      cidr: 30
-      description: SPINE2
-      status: enable
-  leaf3:
-    - interface: Ethernet1
-      ip: 0.0.0.0
-      cidr: 0
-      description: LEAF1
-      status: disable
-    - interface: Ethernet2
-      ip: 172.16.200.10
-      cidr: 30
-      description: SPINE1
-      status: enable
-    - interface: Ethernet3
-      ip: 172.16.200.34
-      cidr: 30
-      description: SPINE2
-      status: enable
-  leaf4:
-    - interface: Ethernet1
-      ip: 0.0.0.0
-      cidr: 0
-      description: LEAF1
-      status: disable
-    - interface: Ethernet2
-      ip: 172.16.200.14
-      cidr: 30
-      description: SPINE1
-      status: enable
-    - interface: Ethernet3
-      ip: 172.16.200.38
-      cidr: 30
-      description: SPINE2
-      status: enable
-  leaf5:
-    - interface: Ethernet1
-      ip: 172.16.200.18
-      cidr: 30
-      description: SPINE1
-      status: enable
-    - interface: Ethernet2
-      ip: 172.16.200.42
-      cidr: 30
-      description: SPINE2
-      status: enable
-  leaf6:
-    - interface: Ethernet1
-      ip: 172.16.200.22
-      cidr: 30
-      description: SPINE1
-      status: enable
-    - interface: Ethernet2
-      ip: 172.16.200.46
-      cidr: 30
-      description: SPINE2
-      status: enable
-
-BGP:
-  spine1:
-    bgp_neighbors:
-      - device: leaf1
-        remote-as: 65101
-      - device: leaf2
-        remote-as: 65102
-      - device: leaf3
-        remote-as: 65103
-      - device: leaf4
-        remote-as: 65104
-      - device: leaf5
-        remote-as: 65105
-      - device: leaf6
-        remote-as: 65106
-    as: 65001
-  spine2:
-    bgp_neighbors:
-      - device: leaf1
-        remote-as: 65101
-      - device: leaf2
-        remote-as: 65102
-      - device: leaf3
-        remote-as: 65103
-      - device: leaf4
-        remote-as: 65104
-      - device: leaf5
-        remote-as: 65105
-      - device: leaf6
-        remote-as: 65106
-    as: 65002
-  leaf1:
-    bgp_neighbors:
-      - device: spine1
-        remote-as: 65001
-      - device: spine2
-        remote-as: 65002
-    as: 65101
-  leaf2:
-    bgp_neighbors:
-      - device: spine1
-        remote-as: 65001
-      - device: spine2
-        remote-as: 65002
-    as: 65102
-  leaf3:
-    bgp_neighbors:
-      - device: spine1
-        remote-as: 65001
-      - device: spine2
-        remote-as: 65002
-    as: 65103
-  leaf4:
-    bgp_neighbors:
-      - device: spine1
-        remote-as: 65001
-      - device: spine2
-        remote-as: 65002
-    as: 65104
-  leaf5:
-    bgp_neighbors:
-      - device: spine1
-        remote-as: 65001
-      - device: spine2
-        remote-as: 65002
-    as: 65105
-  leaf6:
-    bgp_neighbors:
-      - device: spine1
-        remote-as: 65001
-      - device: spine2
-        remote-as: 65002
-    as: 65106
+    interfaces:
+      ethernet:
+        Ethernet1:
+          status: enable
+          description: SPINE1
+          ip: 172.16.200.22
+          cidr: 30
+          mode: L3
+        Ethernet2:
+          status: enable
+          description: SPINE2
+          ip: 172.16.200.46
+          cidr: 30
+          mode: L3
+      loopback:
+        Loopback0:
+          ip: 172.16.0.8
+          cidr: 32
+    BGP:
+      bgp_neighbors:
+        - - spine1
+          - Ethernet7
+        - - spine2
+          - Ethernet7
+      as: 65106
