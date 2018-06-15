@@ -177,6 +177,15 @@ topology:
         Loopback0:
           ip: 172.16.0.3
           cidr: 32
+      svi:
+        Vlan12:
+          ip: 10.0.12.2
+          cidr: 24
+          varp: 10.0.12.1
+        Vlan34:
+          ip: 10.0.34.2
+          cidr: 24
+          varp: 10.0.34.1
     BGP:
       bgp_neighbors:
         - - spine1
@@ -221,6 +230,28 @@ topology:
         Loopback0:
           ip: 172.16.0.4
           cidr: 32
+      svi:
+        Vlan12:
+          ip: 10.0.12.3
+          cidr: 24
+          varp: 10.0.12.1
+        Vlan34:
+          ip: 10.0.34.3
+          cidr: 24
+          varp: 10.0.34.1
+    VLANS:
+      - 12:
+        name: host_12
+        trunkgroup: na
+      - 34:
+        name: host_34
+        trunkgroup: na
+      - 4094:
+        name: PeerLink
+        trunkgroup: mlagpeer
+    MLAG:
+      peer: leaf1
+
     BGP:
       bgp_neighbors:
         - - spine1
