@@ -1,5 +1,7 @@
 ---
 device:
+  #Declare the system MACs of each switch and map it to their hostname
+  # [system_MAC]:[hostname]
   2c:c2:60:56:df:93: spine1
   2c:c2:60:94:d7:6c: spine2
   2c:c2:60:fd:3d:06: leaf1
@@ -59,6 +61,7 @@ topology:
           ip: 172.16.0.1
           cidr: 32
     BGP:
+      #For bgp_neighbors, specify the neighbor hostname and the neighbor's connecting interface
       bgp_neighbors:
         - - leaf1
           - Ethernet2
