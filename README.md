@@ -34,3 +34,4 @@ Here are some of the future additions to this CVP topology builder:
 - Separate out the L3 interface configurations from the BGP configurations into separate configlet builders
 - Add support for specifying networks to be advertised via BGP
 - Overlay support
+- Streamline process for generating the YAML file
