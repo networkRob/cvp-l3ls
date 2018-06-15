@@ -29,6 +29,30 @@ The flow of the remainder of the YAML file for the configuration is as follows:
 					- - leaf1 <-- hostname of the BGP neighbor device
 					  - Ethernet2 <-- Interface on the BGP neighbor device
 
+### Topology
+Here is a high level overview for the interface connections between each Spine and Leaf.
+
+Format for the connections:  [Device][Interface] <---> [Device][Interface]
+- [spine1][Ethernet1] <--> [spine2][Ethernet1]
+- [spine1][Ethernet2] <--> [leaf1][Ethernet2]
+- [spine1][Ethernet3] <--> [leaf2][Ethernet2]
+- [spine1][Ethernet4] <--> [leaf3][Ethernet2]
+- [spine1][Ethernet5] <--> [leaf4][Ethernet2]
+- [spine1][Ethernet6] <--> [leaf5][Ethernet2]
+- [spine1][Ethernet7] <--> [leaf6][Ethernet2]
+- [spine2][Ethernet2] <--> [leaf1][Ethernet3]
+- [spine2][Ethernet3] <--> [leaf2][Ethernet3]
+- [spine2][Ethernet4] <--> [leaf3][Ethernet3]
+- [spine2][Ethernet5] <--> [leaf4][Ethernet3]
+- [spine2][Ethernet6] <--> [leaf5][Ethernet3]
+- [spine2][Ethernet7] <--> [leaf6][Ethernet3]
+- [leaf1][Ethernet1] <--> [leaf2][Ethernet1]
+- [leaf3][Ethernet1] <--> [leaf4][Ethernet1]
+- [leaf1/2/3/4][Ethernet4/5] <--> [host_devices]
+
+
+
+
 ### Future Releases
 Here are some of the future additions to this CVP topology builder:
 - Separate out the L3 interface configurations from the BGP configurations into separate configlet builders
