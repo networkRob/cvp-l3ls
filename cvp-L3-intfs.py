@@ -7,19 +7,22 @@ from cvplibrary import GlobalVariableNames as GVN
 
 #Variable declarations
 yFile = 'hostvars/l3ls.yml'
+virtual_MAC = '00:1c:73:00:00:99'
 
 smac = cvpGV.getValue(GVN.CVP_MAC)
+sIP = cvpGV.getValue(GVN.CVP_IP)
 infoY = yaml.load(open(yFile))
 shost = infoY['device'][smac]
 
 #Grabbing sections of the YAML file
-curINT = infoY['topology'][shost]['interfaces']
-curBGP = infoY['topology'][shost]['BGP']
+curINT = infoY['configurations'][shost]['interfaces']
 lcurINT = []
 lloopINT = {}
+lsvis = []
+VARP = False
 
 
-#L3 interfaces
+#L3 ethernet interfaces
 for r1 in curINT['ethernet']:
     cid = curINT['ethernet'][r1]
     lipn = '%s/%s' %(cid['ip'],cid['cidr'])
@@ -28,6 +31,32 @@ for r1 in curINT['ethernet']:
 
 lcurINT.sort()
 
+#L3 SVIs
+for r1 in curINT['svi']:
+    cid = curINT['svi'][r1]
+    lipn = '%s/%s' %(cid['ip'],cid['cidr'])
+    lvarp = None
+    lmlag = False
+    try:
+        if cid['varp'] != None:
+            VARP = True
+            lvarp = cid['varp']
+    except:
+        pass
+    try:
+        if cid['mlag']:
+            lmlag = True
+        else:
+            lmlag = False
+    except:
+        pass
+    lsvis.append((r1,{'ipn':lipn,'varp':lvarp,'mlag':lmlag}))
+
+lsvis.sort()
+    
+#Output for L3 interfaces
+
+#Ethernet Interfaces
 for r1 in lcurINT:
     print('interface %s' %(r1[0]))
     if r1[1]['status'] == 'disable':
@@ -39,6 +68,8 @@ for r1 in lcurINT:
     else:
         print(' switchport mode %s'%(r1[1]['mode']))
     print('!')
+
+#Loopback Interfaces
 for r1 in curINT['loopback']:
     cidl = curINT['loopback']
     print('interface %s'%r1)
@@ -47,17 +78,15 @@ for r1 in curINT['loopback']:
     lloopINT[r1] = llIP
     print('!')
 
-#Start BGP Section
-print('router bgp %s' %(curBGP['as']))
-print(' router-id %s'%(curINT['loopback']['Loopback0']['ip']))
-print(' maximum-paths 4 ecmp 4')
-for r1 in curBGP['bgp_neighbors']:
-    rede = r1[0]
-    reint = r1[1]
-    reas = infoY['topology'][rede]['BGP']['as']
-    reip = infoY['topology'][rede]['interfaces']['ethernet'][reint]['ip']
-    print(' neighbor %s remote-as %s' %(reip,reas))
-    print(' neighbor %s maximum-routes 12000'%(reip))
-for r1 in lloopINT:
-    print(' network %s'%lloopINT[r1])
-print('!')
+#SVIs
+for r1 in lsvis:
+    print('interface %s'%r1[0])
+    print(' ip address %s'%r1[1]['ipn'])
+    if r1[1]['varp'] != None:
+        print(' ip virtual-router address %s'%r1[1]['varp'])
+    if r1[1]['mlag']:
+        print(' no autostate')
+    print('!')
+if VARP:
+    print('ip virtual-router mac-address %s'%virtual_MAC)
+    print('!')
