@@ -6,7 +6,7 @@ from cvplibrary import GlobalVariableNames as GVN
 
 
 #Variable declarations
-yFile = 'hostvars/l3ls.yml'
+yFile = 'hostvars/dc1.yml'
 virtual_MAC = '00:1c:73:00:00:99'
 
 select_mac = cvpGV.getValue(GVN.CVP_MAC)
@@ -31,7 +31,7 @@ for r1 in device_interfaces['ethernet']:
     cid = device_interfaces['ethernet'][r1]
     lipn = '%s/%s' %(cid['ip'],cid['cidr'])
     lstatus = cid['status']
-    list_device_interfaces.append((r1,{'ipn':lipn,'status':lstatus,'mode':cid['mode'],'desc':cid['description']}))
+    list_device_interfaces.append((r1,{'ipn':lipn,'status':lstatus,'mode':cid['mode'],'desc':cid['description'],'portChannel':cid['portchannel']}))
 
 list_device_interfaces.sort()
 
@@ -71,6 +71,8 @@ for r1 in list_device_interfaces:
         print(' ip address %s'%r1[1]['ipn'])
     else:
         print(' switchport mode %s'%(r1[1]['mode']))
+        if r1[1]['portChannel'] != None:
+            print(' channel-group %s mode active' %r1[1]['portChannel'])
     print('!')
 
 #Loopback Interfaces
