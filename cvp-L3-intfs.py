@@ -1,4 +1,4 @@
-import sys, jsonrpclib
+import sys
 sys.path.append('/usr/lib64/python2.7/site-packages/')
 import yaml
 from cvplibrary import CVPGlobalVariables as cvpGV
@@ -9,31 +9,35 @@ from cvplibrary import GlobalVariableNames as GVN
 yFile = 'hostvars/l3ls.yml'
 virtual_MAC = '00:1c:73:00:00:99'
 
-smac = cvpGV.getValue(GVN.CVP_MAC)
+select_mac = cvpGV.getValue(GVN.CVP_MAC)
 sIP = cvpGV.getValue(GVN.CVP_IP)
-infoY = yaml.load(open(yFile))
-shost = infoY['device'][smac]
+
+yaml_file = open(yFile)
+info_yaml = yaml.load(yaml_file)
+yaml_file.close()
+
+shost = info_yaml['device'][select_mac]
 
 #Grabbing sections of the YAML file
-curINT = infoY['configurations'][shost]['interfaces']
-lcurINT = []
-lloopINT = {}
-lsvis = []
+device_interfaces = info_yaml['configurations'][shost]['interfaces']
+list_device_interfaces = []
+#dict_loopback_interfaces = {}
+list_svi_interfaces = []
 VARP = False
 
 
 #L3 ethernet interfaces
-for r1 in curINT['ethernet']:
-    cid = curINT['ethernet'][r1]
+for r1 in device_interfaces['ethernet']:
+    cid = device_interfaces['ethernet'][r1]
     lipn = '%s/%s' %(cid['ip'],cid['cidr'])
     lstatus = cid['status']
-    lcurINT.append((r1,{'ipn':lipn,'status':lstatus,'mode':cid['mode'],'desc':cid['description']}))
+    list_device_interfaces.append((r1,{'ipn':lipn,'status':lstatus,'mode':cid['mode'],'desc':cid['description']}))
 
-lcurINT.sort()
+list_device_interfaces.sort()
 
 #L3 SVIs
-for r1 in curINT['svi']:
-    cid = curINT['svi'][r1]
+for r1 in device_interfaces['svi']:
+    cid = device_interfaces['svi'][r1]
     lipn = '%s/%s' %(cid['ip'],cid['cidr'])
     lvarp = None
     lmlag = False
@@ -50,14 +54,14 @@ for r1 in curINT['svi']:
             lmlag = False
     except:
         pass
-    lsvis.append((r1,{'ipn':lipn,'varp':lvarp,'mlag':lmlag}))
+    list_svi_interfaces.append((r1,{'ipn':lipn,'varp':lvarp,'mlag':lmlag}))
 
-lsvis.sort()
+list_svi_interfaces.sort()
     
 #Output for L3 interfaces
 
 #Ethernet Interfaces
-for r1 in lcurINT:
+for r1 in list_device_interfaces:
     print('interface %s' %(r1[0]))
     if r1[1]['status'] == 'disable':
         print(' shutdown')
@@ -70,16 +74,16 @@ for r1 in lcurINT:
     print('!')
 
 #Loopback Interfaces
-for r1 in curINT['loopback']:
-    cidl = curINT['loopback']
+for r1 in device_interfaces['loopback']:
+    cidl = device_interfaces['loopback']
     print('interface %s'%r1)
     llIP = '%s/%s'%(cidl[r1]['ip'],cidl[r1]['cidr'])
     print(' ip address %s'%llIP)
-    lloopINT[r1] = llIP
+    #lloopINT[r1] = llIP
     print('!')
 
 #SVIs
-for r1 in lsvis:
+for r1 in list_svi_interfaces:
     print('interface %s'%r1[0])
     print(' ip address %s'%r1[1]['ipn'])
     if r1[1]['varp'] != None:

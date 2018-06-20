@@ -1,4 +1,4 @@
-import sys, jsonrpclib
+import sys
 sys.path.append('/usr/lib64/python2.7/site-packages/')
 import yaml
 from cvplibrary import CVPGlobalVariables as cvpGV
@@ -9,7 +9,11 @@ from cvplibrary import GlobalVariableNames as GVN
 yFile = 'hostvars/l3ls.yml'
 
 smac = cvpGV.getValue(GVN.CVP_MAC)
-infoY = yaml.load(open(yFile))
+
+yaml_file = open(yFile)
+infoY = yaml.load(yaml_file)
+yaml_file.close()
+
 shost = infoY['device'][smac]
 
 #Grabbing sections of the YAML file

@@ -97,9 +97,9 @@ configurations:
         - - leaf4
           - Ethernet2
         - - leaf5
-          - Ethernet1
+          - Ethernet2
         - - leaf6
-          - Ethernet1
+          - Ethernet2
       as: 65001
   spine2:
     interfaces:
@@ -161,9 +161,9 @@ configurations:
         - - leaf4
           - Ethernet3
         - - leaf5
-          - Ethernet2
+          - Ethernet3
         - - leaf6
-          - Ethernet2
+          - Ethernet3
       as: 65002
   leaf1:
     interfaces:
@@ -225,8 +225,10 @@ configurations:
           name: PeerLink
           trunkgroup: mlagpeer
     MLAG:
+      enabled: True
       global: True
       custom:
+        domainid: leaf1-leaf2
         peer: leaf2
         heartbeat: True
     BGP:
@@ -296,8 +298,10 @@ configurations:
           name: PeerLink
           trunkgroup: mlagpeer
     MLAG:
+      enabled: True
       global: True
       custom:
+        domainid: leaf1-leaf2
         peer: leaf1
         heartbeat: True
     BGP:
@@ -309,6 +313,8 @@ configurations:
       as: 65102
   leaf3:
     interfaces:
+      portchannel:
+        global: True
       ethernet:
         Ethernet1:
           status: enable
@@ -364,6 +370,13 @@ configurations:
         - vlan: 4094
           name: PeerLink
           trunkgroup: mlagpeer
+    MLAG:
+      enabled: True
+      global: True
+      custom:
+        domainid: leaf3-leaf4
+        peer: leaf4
+        heartbeat: True
     BGP:
       bgp_neighbors:
         - - spine1
@@ -373,6 +386,8 @@ configurations:
       as: 65103
   leaf4:
     interfaces:
+      portchannel:
+        global: True
       ethernet:
         Ethernet1:
           status: enable
@@ -428,6 +443,13 @@ configurations:
         - vlan: 4094
           name: PeerLink
           trunkgroup: mlagpeer
+    MLAG:
+      enabled: True
+      global: True
+      custom:
+        domainid: leaf3-leaf4
+        peer: leaf3
+        heartbeat: True
     BGP:
       bgp_neighbors:
         - - spine1
@@ -437,14 +459,23 @@ configurations:
       as: 65104
   leaf5:
     interfaces:
+      portchannel:
+        global: True
       ethernet:
         Ethernet1:
+          status: enable
+          description: LEAF6 Peer
+          ip: 
+          cidr: 
+          mode: trunk
+          portchannel: 1
+        Ethernet2:
           status: enable
           description: SPINE1
           ip: 172.16.200.18
           cidr: 30
           mode: L3
-        Ethernet2:
+        Ethernet3:
           status: enable
           description: SPINE2
           ip: 172.16.200.42
@@ -454,6 +485,24 @@ configurations:
         Loopback0:
           ip: 172.16.0.7
           cidr: 32
+      svi:
+        Vlan4094:
+          ip: 10.1.1.9
+          cidr: 30
+          mlag: True
+    VLANS:
+      global: True
+      custom:
+        - vlan: 4094
+          name: PeerLink
+          trunkgroup: mlagpeer
+    MLAG:
+      enabled: True
+      global: True
+      custom:
+        domainid: leaf5-leaf6
+        peer: leaf6
+        heartbeat: True
     BGP:
       bgp_neighbors:
         - - spine1
@@ -463,14 +512,23 @@ configurations:
       as: 65105
   leaf6:
     interfaces:
+      portchannel:
+        global: True
       ethernet:
         Ethernet1:
+          status: enable
+          description: LEAF5 Peer
+          ip: 
+          cidr: 
+          mode: trunk
+          portchannel: 1
+        Ethernet2:
           status: enable
           description: SPINE1
           ip: 172.16.200.22
           cidr: 30
           mode: L3
-        Ethernet2:
+        Ethernet3:
           status: enable
           description: SPINE2
           ip: 172.16.200.46
@@ -480,6 +538,24 @@ configurations:
         Loopback0:
           ip: 172.16.0.8
           cidr: 32
+      svi:
+        Vlan4094:
+          ip: 10.1.1.10
+          cidr: 30
+          mlag: True
+    VLANS:
+      global: True
+      custom:
+        - vlan: 4094
+          name: PeerLink
+          trunkgroup: mlagpeer
+    MLAG:
+      enabled: True
+      global: True
+      custom:
+        domainid: leaf5-leaf6
+        peer: leaf5
+        heartbeat: True
     BGP:
       bgp_neighbors:
         - - spine1
