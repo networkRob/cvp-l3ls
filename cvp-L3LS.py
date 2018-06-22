@@ -1,3 +1,7 @@
+"""
+This script is used to create BGP configurations within the L3 leaf and spine topology.
+"""
+
 import sys
 sys.path.append('/usr/lib64/python2.7/site-packages/')
 import yaml
@@ -6,7 +10,7 @@ from cvplibrary import GlobalVariableNames as GVN
 
 
 #Variable declarations
-yFile = 'hostvars/l3ls.yml'
+yFile = 'hostvars/dc1.yml'
 
 smac = cvpGV.getValue(GVN.CVP_MAC)
 

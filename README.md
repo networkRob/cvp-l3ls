@@ -1,13 +1,13 @@
-# CVP L3 Leaf Spine Configlet Builder
-This set of scripts are a basis on building the configurations for a layer 3 leaf and spine topology.  These scripts will only configure interfaces and BGP settings for each device.
+# CVP L3 Leaf Spine Configlet Builder v1.1
+This set of scripts are a basis on building the configurations for a layer 3 leaf and spine topology.  These scripts will configure L3 interfaces (ethernet, svi, loopback), MLAG, VLANS, and BGP settings for each device.  Where there are configurations for them in the YAML file.
 
-This configlet builder will work on devices newly joined to CloudVision.  Within the l3ls.yml file, there is a section that ties the system MAC Addresses for the switches to their hostnames.
+This configlet builder will work on devices newly joined to CloudVision or existing ones with the appropriate data provided.  Within the dc1.yml file, there is a section that ties the system MAC Addresses for the switches to their hostnames.
 
 ### Setup
-Few notes on the configuration of the l3ls.yml file:
+Few notes on the configuration of the dc1.yml file:
 
 This file will be installed in the following directory on the CloudVision appliance:
-	/home/cvp/hostvars/l3ls.yml
+	/home/cvp/hostvars/dc1.yml
 
 When mapping system MAC addresses to hostnames, this will be done in the devices section:
 
@@ -48,14 +48,18 @@ Format for the connections:  [Device][Interface] <---> [Device][Interface]
 - [spine2][Ethernet7] <--> [leaf6][Ethernet3]
 - [leaf1][Ethernet1] <--> [leaf2][Ethernet1]
 - [leaf3][Ethernet1] <--> [leaf4][Ethernet1]
+- [leaf5][Ethernet1] <--> [leaf6][Ethernet1]
 - [leaf1/2/3/4][Ethernet4/5] <--> [host_devices]
 
 
+### Features added in v1.1
+- Separated out the L3 interface configurations from the BGP configurations script into their own scripts
+- Created scripts to generate configlets for MLAG and VLANS
 
 
 ### Future Releases
 Here are some of the future additions to this CVP topology builder:
-- Separate out the L3 interface configurations from the BGP configurations into separate configlet builders
+- ~~ Separate out the L3 interface configurations from the BGP configurations into separate configlet builders~~ [v1.1]
 - Add support for specifying networks to be advertised via BGP
 - Overlay support
 - Streamline process for generating the YAML file

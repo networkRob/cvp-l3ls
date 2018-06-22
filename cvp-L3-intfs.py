@@ -1,3 +1,7 @@
+"""
+This script is used to create L3 interfaces for ethernet, svi's, and loopback interfaces.
+"""
+
 import sys
 sys.path.append('/usr/lib64/python2.7/site-packages/')
 import yaml
@@ -36,25 +40,26 @@ for r1 in device_interfaces['ethernet']:
 list_device_interfaces.sort()
 
 #L3 SVIs
-for r1 in device_interfaces['svi']:
-    cid = device_interfaces['svi'][r1]
-    lipn = '%s/%s' %(cid['ip'],cid['cidr'])
-    lvarp = None
-    lmlag = False
-    try:
-        if cid['varp'] != None:
-            VARP = True
-            lvarp = cid['varp']
-    except:
-        pass
-    try:
-        if cid['mlag']:
-            lmlag = True
-        else:
-            lmlag = False
-    except:
-        pass
-    list_svi_interfaces.append((r1,{'ipn':lipn,'varp':lvarp,'mlag':lmlag}))
+if device_interfaces['svi'] != None:
+    for r1 in device_interfaces['svi']:
+        cid = device_interfaces['svi'][r1]
+        lipn = '%s/%s' %(cid['ip'],cid['cidr'])
+        lvarp = None
+        lmlag = False
+        try:
+            if cid['varp'] != None:
+                VARP = True
+                lvarp = cid['varp']
+        except:
+            pass
+        try:
+            if cid['mlag']:
+                lmlag = True
+            else:
+                lmlag = False
+        except:
+            pass
+        list_svi_interfaces.append((r1,{'ipn':lipn,'varp':lvarp,'mlag':lmlag}))
 
 list_svi_interfaces.sort()
     
@@ -85,14 +90,15 @@ for r1 in device_interfaces['loopback']:
     print('!')
 
 #SVIs
-for r1 in list_svi_interfaces:
-    print('interface %s'%r1[0])
-    print(' ip address %s'%r1[1]['ipn'])
-    if r1[1]['varp'] != None:
-        print(' ip virtual-router address %s'%r1[1]['varp'])
-    if r1[1]['mlag']:
-        print(' no autostate')
-    print('!')
-if VARP:
-    print('ip virtual-router mac-address %s'%virtual_MAC)
-    print('!')
+if list_svi_interfaces != []:
+    for r1 in list_svi_interfaces:
+        print('interface %s'%r1[0])
+        print(' ip address %s'%r1[1]['ipn'])
+        if r1[1]['varp'] != None:
+            print(' ip virtual-router address %s'%r1[1]['varp'])
+        if r1[1]['mlag']:
+            print(' no autostate')
+        print('!')
+    if VARP:
+        print('ip virtual-router mac-address %s'%virtual_MAC)
+        print('!')
