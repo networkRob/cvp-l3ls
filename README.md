@@ -59,7 +59,7 @@ Format for the connections:  [Device][Interface] <---> [Device][Interface]
 
 ### Future Releases
 Here are some of the future additions to this CVP topology builder:
-- ~~ Separate out the L3 interface configurations from the BGP configurations into separate configlet builders~~ [v1.1]
+- ~~Separate out the L3 interface configurations from the BGP configurations into separate configlet builders~~ [v1.1]
 - Add support for specifying networks to be advertised via BGP
 - Overlay support
 - Streamline process for generating the YAML file
