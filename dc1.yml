@@ -10,7 +10,32 @@ device:
   2c:c2:60:b5:96:d9: leaf4
   2c:c2:60:e7:0d:cd: leaf5
   2c:c2:60:e7:4c:37: leaf6
-topology:
+global:
+  leafs:
+    portchannel:
+      - intf: Port-Channel1
+        mode: trunk
+        trunkgroup: mlagpeer
+    MLAG:
+      trunkgroup: mlagpeer
+      local: Vlan4094
+      peerLink: Port-Channel1
+      relDelay: 180
+      dualDelay: 10
+    VLANS:
+      - vlan: 12
+        name: hostnetwork_12
+        trunkgroup: 
+      - vlan: 13
+        name: hostnetwork_13
+        trunkgroup:
+      - vlan: 34
+        name: hostnetwork_34
+        trunkgroup:
+      - vlan: 35
+        name: hostnetwork_35
+        trunkgroup:
+configurations:
   spine1:
     interfaces:
       ethernet:
@@ -20,46 +45,54 @@ topology:
           ip: 0
           cidr: 0
           mode: trunk
+          portchannel:
         Ethernet2:
           status: enable
           description: LEAF1
           ip: 172.16.200.1
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet3:
           status: enable
           description: LEAF2
           ip: 172.16.200.5
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet4:
           status: enable
           description: LEAF3
           ip: 172.16.200.9
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet5:
           status: enable
           description: LEAF4
           ip: 172.16.200.13
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet6:
           status: enable
           description: LEAF5
           ip: 172.16.200.17
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet7:
           status: enable
           description: LEAF6
           ip: 172.16.200.21
           cidr: 30
           mode: L3
+          portchannel:
       loopback:
         Loopback0:
           ip: 172.16.0.1
           cidr: 32
+      svi:
     BGP:
       #For bgp_neighbors, specify the neighbor hostname and the neighbor's connecting interface
       bgp_neighbors:
@@ -72,9 +105,9 @@ topology:
         - - leaf4
           - Ethernet2
         - - leaf5
-          - Ethernet1
+          - Ethernet2
         - - leaf6
-          - Ethernet1
+          - Ethernet2
       as: 65001
   spine2:
     interfaces:
@@ -85,46 +118,54 @@ topology:
           ip: 0
           cidr: 0
           mode: trunk
+          portchannel:
         Ethernet2:
           status: enable
           description: LEAF1
           ip: 172.16.200.25
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet3:
           status: enable
           description: LEAF2
           ip: 172.16.200.29
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet4:
           status: enable
           description: LEAF3
           ip: 172.16.200.33
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet5:
           status: enable
           description: LEAF4
           ip: 172.16.200.37
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet6:
           status: enable
           description: LEAF5
           ip: 172.16.200.41
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet7:
           status: enable
           description: LEAF6
           ip: 172.16.200.45
           cidr: 30
           mode: L3
+          portchannel:
       loopback:
         Loopback0:
           ip: 172.16.0.2
           cidr: 32
+      svi:
     BGP:
       bgp_neighbors:
         - - leaf1
@@ -136,47 +177,80 @@ topology:
         - - leaf4
           - Ethernet3
         - - leaf5
-          - Ethernet2
+          - Ethernet3
         - - leaf6
-          - Ethernet2
+          - Ethernet3
       as: 65002
   leaf1:
     interfaces:
+      portchannel:
+        global: True
       ethernet:
         Ethernet1:
-          status: disable
+          status: enable
           description: LEAF2 Peer
-          ip: 0
-          cidr: 0
+          ip: 
+          cidr: 
           mode: trunk
+          portchannel: 1
         Ethernet2:
           status: enable
           description: SPINE1
           ip: 172.16.200.2
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet3:
           status: enable
           description: SPINE2
           ip: 172.16.200.26
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet4:
-          status: enable
+          status: disable
           description: HOST
-          ip: 0
-          cidr: 0
+          ip: 
+          cidr: 
           mode: trunk
+          portchannel:
         Ethernet5:
-          status: enable
+          status: disable
           description: HOST
-          ip: 0
-          cidr: 0
+          ip: 
+          cidr: 
           mode: trunk
+          portchannel:
       loopback:
         Loopback0:
           ip: 172.16.0.3
           cidr: 32
+      svi:
+        Vlan12:
+          ip: 10.0.12.2
+          cidr: 24
+          varp: 10.0.12.1
+        Vlan34:
+          ip: 10.0.34.2
+          cidr: 24
+          varp: 10.0.34.1
+        Vlan4094:
+          ip: 10.1.1.1
+          cidr: 30
+          mlag: True
+    VLANS:
+      global: True
+      custom:
+        - vlan: 4094
+          name: PeerLink
+          trunkgroup: mlagpeer
+    MLAG:
+      enabled: True
+      global: True
+      custom:
+        domainid: leaf1-leaf2
+        peer: leaf2
+        heartbeat: True
     BGP:
       bgp_neighbors:
         - - spine1
@@ -186,41 +260,74 @@ topology:
       as: 65101
   leaf2:
     interfaces:
+      portchannel:
+        global: True
       ethernet:
         Ethernet1:
-          status: disable
+          status: enable
           description: LEAF1 Peer
-          ip: 0
-          cidr: 0
+          ip: 
+          cidr: 
           mode: trunk
+          portchannel: 1
         Ethernet2:
           status: enable
           description: SPINE1
           ip: 172.16.200.6
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet3:
           status: enable
           description: SPINE2
           ip: 172.16.200.30
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet4:
-          status: enable
+          status: disable
           description: HOST
-          ip: 0
-          cidr: 0
+          ip: 
+          cidr: 
           mode: trunk
+          portchannel:
         Ethernet5:
-          status: enable
+          status: disable
           description: HOST
-          ip: 0
-          cidr: 0
+          ip: 
+          cidr: 
           mode: trunk
+          portchannel:
       loopback:
         Loopback0:
           ip: 172.16.0.4
           cidr: 32
+      svi:
+        Vlan12:
+          ip: 10.0.12.3
+          cidr: 24
+          varp: 10.0.12.1
+        Vlan34:
+          ip: 10.0.34.3
+          cidr: 24
+          varp: 10.0.34.1
+        Vlan4094:
+          ip: 10.1.1.2
+          cidr: 30
+          mlag: True
+    VLANS:
+      global: True
+      custom:
+        - vlan: 4094
+          name: PeerLink
+          trunkgroup: mlagpeer
+    MLAG:
+      enabled: True
+      global: True
+      custom:
+        domainid: leaf1-leaf2
+        peer: leaf1
+        heartbeat: True
     BGP:
       bgp_neighbors:
         - - spine1
@@ -230,41 +337,74 @@ topology:
       as: 65102
   leaf3:
     interfaces:
+      portchannel:
+        global: True
       ethernet:
         Ethernet1:
-          status: disable
+          status: enable
           description: LEAF4 Peer
-          ip: 0
-          cidr: 0
+          ip: 
+          cidr: 
           mode: trunk
+          portchannel: 1
         Ethernet2:
           status: enable
           description: SPINE1
           ip: 172.16.200.10
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet3:
           status: enable
           description: SPINE2
           ip: 172.16.200.34
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet4:
           status: enable
           description: HOST
           ip: 0
           cidr: 0
           mode: trunk
+          portchannel:
         Ethernet5:
           status: enable
           description: HOST
           ip: 0
           cidr: 0
           mode: trunk
+          portchannel:
       loopback:
         Loopback0:
           ip: 172.16.0.5
           cidr: 32
+      svi:
+        Vlan13:
+          ip: 10.0.13.2
+          cidr: 24
+          varp: 10.0.13.1
+        Vlan35:
+          ip: 10.0.35.2
+          cidr: 24
+          varp: 10.0.35.1
+        Vlan4094:
+          ip: 10.1.1.5
+          cidr: 30
+          mlag: True
+    VLANS:
+      global: True
+      custom:
+        - vlan: 4094
+          name: PeerLink
+          trunkgroup: mlagpeer
+    MLAG:
+      enabled: True
+      global: True
+      custom:
+        domainid: leaf3-leaf4
+        peer: leaf4
+        heartbeat: True
     BGP:
       bgp_neighbors:
         - - spine1
@@ -274,41 +414,74 @@ topology:
       as: 65103
   leaf4:
     interfaces:
+      portchannel:
+        global: True
       ethernet:
         Ethernet1:
-          status: disable
+          status: enable
           description: LEAF3 Peer
-          ip: 0
-          cidr: 0
+          ip: 
+          cidr: 
           mode: trunk
+          portchannel: 1
         Ethernet2:
           status: enable
           description: SPINE1
           ip: 172.16.200.14
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet3:
           status: enable
           description: SPINE2
           ip: 172.16.200.38
           cidr: 30
           mode: L3
+          portchannel:
         Ethernet4:
           status: enable
           description: HOST
           ip: 0
           cidr: 0
           mode: trunk
+          portchannel:
         Ethernet5:
           status: enable
           description: HOST
           ip: 0
           cidr: 0
           mode: trunk
+          portchannel:
       loopback:
         Loopback0:
           ip: 172.16.0.6
           cidr: 32
+      svi:
+        Vlan13:
+          ip: 10.0.13.2
+          cidr: 24
+          varp: 10.0.13.1
+        Vlan35:
+          ip: 10.0.35.2
+          cidr: 24
+          varp: 10.0.35.1
+        Vlan4094:
+          ip: 10.1.1.6
+          cidr: 30
+          mlag: True
+    VLANS:
+      global: True
+      custom:
+        - vlan: 4094
+          name: PeerLink
+          trunkgroup: mlagpeer
+    MLAG:
+      enabled: True
+      global: True
+      custom:
+        domainid: leaf3-leaf4
+        peer: leaf3
+        heartbeat: True
     BGP:
       bgp_neighbors:
         - - spine1
@@ -318,23 +491,52 @@ topology:
       as: 65104
   leaf5:
     interfaces:
+      portchannel:
+        global: True
       ethernet:
         Ethernet1:
+          status: enable
+          description: LEAF6 Peer
+          ip: 
+          cidr: 
+          mode: trunk
+          portchannel: 1
+        Ethernet2:
           status: enable
           description: SPINE1
           ip: 172.16.200.18
           cidr: 30
           mode: L3
-        Ethernet2:
+          portchannel:
+        Ethernet3:
           status: enable
           description: SPINE2
           ip: 172.16.200.42
           cidr: 30
           mode: L3
+          portchannel:
       loopback:
         Loopback0:
           ip: 172.16.0.7
           cidr: 32
+      svi:
+        Vlan4094:
+          ip: 10.1.1.9
+          cidr: 30
+          mlag: True
+    VLANS:
+      global: True
+      custom:
+        - vlan: 4094
+          name: PeerLink
+          trunkgroup: mlagpeer
+    MLAG:
+      enabled: True
+      global: True
+      custom:
+        domainid: leaf5-leaf6
+        peer: leaf6
+        heartbeat: True
     BGP:
       bgp_neighbors:
         - - spine1
@@ -344,23 +546,52 @@ topology:
       as: 65105
   leaf6:
     interfaces:
+      portchannel:
+        global: True
       ethernet:
         Ethernet1:
+          status: enable
+          description: LEAF5 Peer
+          ip: 
+          cidr: 
+          mode: trunk
+          portchannel: 1
+        Ethernet2:
           status: enable
           description: SPINE1
           ip: 172.16.200.22
           cidr: 30
           mode: L3
-        Ethernet2:
+          portchannel:
+        Ethernet3:
           status: enable
           description: SPINE2
           ip: 172.16.200.46
           cidr: 30
           mode: L3
+          portchannel:
       loopback:
         Loopback0:
           ip: 172.16.0.8
           cidr: 32
+      svi:
+        Vlan4094:
+          ip: 10.1.1.10
+          cidr: 30
+          mlag: True
+    VLANS:
+      global: True
+      custom:
+        - vlan: 4094
+          name: PeerLink
+          trunkgroup: mlagpeer
+    MLAG:
+      enabled: True
+      global: True
+      custom:
+        domainid: leaf5-leaf6
+        peer: leaf5
+        heartbeat: True
     BGP:
       bgp_neighbors:
         - - spine1
